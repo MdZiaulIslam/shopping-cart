@@ -25,11 +25,11 @@
 
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
-                           <button class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input type="text" class="form-control text-center" value="1">
-                           <button class="btn btn-default"><i class="fas fa-plus"></i></button>
+                           <button id="phone-quantity-down" class="btn btn-default"><i class="fas fa-minus"></i></button>
+                           <input id="phone-quantity" type="text" class="form-control text-center" value="1">
+                           <button id="phone-quantity-up" class="btn btn-default"><i class="fas fa-plus"></i></button>
                         </div>
-                        <h5>$1219</h5>
+                        <h5>$ <span id="phone-price">1219</span></h5>
                         <img src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
@@ -43,12 +43,12 @@
                      </div>
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
-                           <button class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input type="text" class="form-control text-center" value="1">
-                           <button class="btn btn-default"><i class="fas fa-plus"></i></button>
+                           <button id="case-quantity-down" class="btn btn-default"><i class="fas fa-minus"></i></button>
+                           <input id="case-quantity" type="text" class="form-control text-center" value="1">
+                           <button id="case-quantity-up" class="btn btn-default"><i class="fas fa-plus"></i></button>
 
                         </div>
-                        <h5>$59</h5>
+                        <h5>$<span id="case-price">59</span></h5>
                         <img src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
@@ -59,14 +59,14 @@
 
                      <div class="col-md-8">
                         <h5>Subtotal: </h5>
-                        <h5>Tax:</h5>
+                        <h5>Tax: <small>(Standard: 7.25%)</small></h5>
                         <h5>Total:</h5>
                      </div>
 
                      <div class="col-md-4 status">
-                        <h5>$1,278</h5>
-                        <h5>$0</h5>
-                        <h5>$1,278</h5>
+                        <h5>$<span id="sub-total">1278</span> </h5>
+                        <h5>$<span id="tax">0</span></h5>
+                        <h5>$<span id="total">1,278</span></h5>
                      </div>
                   </div>
                </div>
@@ -77,6 +77,95 @@
          </div>
       </div>
    </section>
+
+   <!-- JavaScript Started -->
+   <script>
+      // Phone
+      const phoneQuantityUp = document.getElementById("phone-quantity-up");
+      phoneQuantityUp.addEventListener("click", function(){
+         const phoneQuantity = quantityUpdate("phone-quantity", 1);
+         priceUpdate("phone-price", phoneQuantity, 1219);
+         const subTotalAmount = parseFloat(subTotalUpdate("sub-total", 1219));
+         const finalTax = parseFloat(tax("tax", subTotalAmount));
+         total("total", subTotalAmount, finalTax);
+ 
+      })
+      const phoneQuantityDown = document.getElementById("phone-quantity-down");
+      phoneQuantityDown.addEventListener("click", function(){
+         const phoneQuantity = quantityUpdate("phone-quantity", -1);
+         priceUpdate("phone-price", phoneQuantity, 1219);
+         const subTotalAmount = parseFloat(subTotalUpdate("sub-total", -1219));
+         const finalTax = parseFloat(tax("tax", subTotalAmount));
+         total("total", subTotalAmount, finalTax);
+
+      })
+      // Case
+      const caseQuantityUp = document.getElementById("case-quantity-up");
+      caseQuantityUp.addEventListener("click", function(){
+         const caseQuantity = quantityUpdate("case-quantity", 1);
+         priceUpdate("case-price", caseQuantity, 59);
+         const subTotalAmount = parseFloat(subTotalUpdate("sub-total", 59));
+         const finalTax = parseFloat(tax("tax", subTotalAmount));
+         total("total", subTotalAmount, finalTax);
+       
+      })
+      const caseQuantityDown = document.getElementById("case-quantity-down");
+      caseQuantityDown.addEventListener("click", function(){
+         const caseQuantity = quantityUpdate("case-quantity", -1);
+         priceUpdate("case-price", caseQuantity, 59);
+         const subTotalAmount = parseFloat(subTotalUpdate("sub-total", -59));
+         const finalTax = parseFloat(tax("tax", subTotalAmount));
+         total("total", subTotalAmount, finalTax);
+      
+      })
+      // Functions 
+      
+      function tax(id, finalSubTotal){
+         const tax = document.getElementById(id).innerText;
+         const currentTax = parseFloat(tax);
+         const newTax = parseFloat(finalSubTotal * 0.075).toFixed(2);
+         document.getElementById(id).innerText = newTax;
+         return newTax;
+
+      }   
+
+      function total(id, finalSubTotal, taxTotal){
+         const total = document.getElementById(id).innerText;
+         const currentTotal = parseFloat(total);
+         const newTotal = parseFloat(finalSubTotal + taxTotal).toFixed(2);
+         document.getElementById(id).innerText = newTotal;
+         return newTotal;
+
+      }
+
+      function subTotalUpdate(id, addedTotal){
+         const subTotal = document.getElementById(id).innerText;
+         const currentSubTotal = parseFloat(subTotal);
+         const newSubTotal = parseFloat(currentSubTotal + addedTotal).toFixed(2);
+         document.getElementById(id).innerText = newSubTotal;
+         return newSubTotal;
+         
+      }
+
+      function priceUpdate(id, quantity, givenPrice){
+         const price = document.getElementById(id).innerText;
+         const priceAmount = parseFloat(price);
+         const newPrice = quantity * givenPrice;
+         document.getElementById(id).innerText = newPrice;
+         return newPrice;
+
+      }
+
+      function quantityUpdate(id, plusOrMinusOne){
+         const quantity = document.getElementById(id).value;
+         const quantityNumber = parseInt(quantity);
+         const newQuantity = quantityNumber + plusOrMinusOne;
+         document.getElementById(id).value = newQuantity;
+         return newQuantity;
+
+      }
+
+   </script>
 </body>
 
 </html>
